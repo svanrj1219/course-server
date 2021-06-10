@@ -2,6 +2,7 @@ package Controllers
 
 import (
 	"gitee.com/svanrj/server/Databases"
+	"gitee.com/svanrj/server/Middlewares"
 	"gitee.com/svanrj/server/Models"
 	"gitee.com/svanrj/server/utils"
 	"github.com/gin-gonic/gin"
@@ -22,10 +23,13 @@ func Login(c *gin.Context){
 			return
 		}
 		if password==user.Password{
+			tokenString,_:=Middlewares.GenToken(username)
 			c.JSON(http.StatusOK,gin.H{
 				"code":0,
 				"message":"登录成功",
-				"data":user.Username,
+				"data":gin.H{
+					"token": tokenString,
+				},
 			})
 		}else {
 			c.JSON(http.StatusOK,gin.H{
