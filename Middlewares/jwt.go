@@ -20,14 +20,14 @@ type MyClaims struct {
 
 const TokenExpireDuration = time.Hour * 24
 
-var MySecret = []byte("svanrj")
+var MySecret = []byte("grhxnj")
 
 func GenToken(username string) (string, error) {
 	c := MyClaims{
 		Username: username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(),
-			Issuer: "svanrj",
+			Issuer:    "grhxnj",
 		},
 	}
 	// 使用指定的签名方法创建签名对象
@@ -35,6 +35,7 @@ func GenToken(username string) (string, error) {
 	// 使用指定的secret签名并获得完整的编码后的字符串token
 	return token.SignedString(MySecret)
 }
+
 // ParseToken 解析JWT
 func ParseToken(tokenString string) (*MyClaims, error) {
 	// 解析token

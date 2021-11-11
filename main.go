@@ -5,12 +5,6 @@ import (
 	"gitee.com/svanrj/server/Router"
 )
 
-
-type UserInfo struct {
-	ID uint
-	Username string
-	Password string
-}
 func main() {
 	Databases.Mysql()
 	defer Databases.DB.Close()
