@@ -3,7 +3,6 @@ package Controllers
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/svanrj/server/Middlewares"
 	"gitee.com/svanrj/server/Models"
 	"gitee.com/svanrj/server/utils"
 	"github.com/gin-gonic/gin"
@@ -31,11 +30,11 @@ func Login(c *gin.Context) {
 			return
 		}
 		if password == userInfo.Password {
-			tokenString, _ := Middlewares.GenToken(username)
+			tokenString, _ := utils.GenToken(username)
 			c.JSON(http.StatusOK, gin.H{
 				"code":    0,
 				"message": "登录成功",
-				"token":   "Bearer " + tokenString,
+				"token":   tokenString,
 			})
 		} else {
 			c.JSON(http.StatusOK, gin.H{
@@ -122,5 +121,18 @@ func GetJf(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 1,
 		"jf":   jf,
+	})
+}
+func GetHistoryJf(c *gin.Context) {
+	var historyJf Models.HistoryJf
+	historyJfs, err := historyJf.GetHistoryJfModel()
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 1,
+		"data": historyJfs,
 	})
 }

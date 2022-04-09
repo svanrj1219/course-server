@@ -18,11 +18,11 @@ type Course struct {
 func (cou *Course) GetCourse(t string) (c []Course, err error) {
 	if t == "全部" {
 		var courses []Course
-		err = Databases.DB.Find(&courses).Error
+		err = Databases.DB.Order("sort").Find(&courses).Error
 		return courses, err
 	} else {
 		var courses []Course
-		err = Databases.DB.Where("belongto=?", t).Find(&courses).Error
+		err = Databases.DB.Order("sort").Where("belongto=?", t).Find(&courses).Error
 		return courses, err
 	}
 }

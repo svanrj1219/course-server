@@ -33,7 +33,7 @@ func GetLog(c *gin.Context) {
 	// 反序列化
 	_ = json.Unmarshal(b, &m)
 	var task Models.Task
-	Logs, err := task.GetLogModel(m["uid"])
+	Logs, err := task.GetLogModel(m)
 
 	if err != nil {
 		fmt.Println(err)

@@ -9,5 +9,4 @@ func main() {
 	Databases.Mysql()
 	defer Databases.DB.Close()
 	Router.InitRouter()
-
 }

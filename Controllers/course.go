@@ -23,8 +23,9 @@ func GetCourse(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code": 1,
-		"data": courses,
+		"code":    1,
+		"data":    courses,
+		"message": "获取成功",
 	})
 }
 

@@ -13,6 +13,20 @@ func InitRouter() {
 	r.Use(Middlewares.Cors())
 	//处理请求
 	r.POST("/login", Controllers.Login)
+	adminGroup := r.Group("/admin")
+	adminGroup.Use(Middlewares.JWTAuthMiddleware())
+	{
+		adminGroup.POST("/setCourse", Controllers.SetCourse)
+		adminGroup.GET("/getTodayTask", Controllers.GetTodayTask)
+		adminGroup.GET("/getHistoryJf", Controllers.GetHistoryJf)
+		adminGroup.GET("/getTaskSummary", Controllers.GetTaskSummary)
+		adminGroup.GET("/getMallSummary", Controllers.GetMallSummary)
+		adminGroup.GET("/unconverted", Controllers.GetUnconverted)
+		adminGroup.GET("/taskLog", Controllers.GetTaskLog)
+		adminGroup.GET("/mallLog", Controllers.GetMallLog)
+		adminGroup.PUT("/unconverted/:id", Controllers.UpdateUnconverted)
+	}
+	r.POST("/getCourse", Controllers.GetCourse)
 	r.POST("/wxlogin", Controllers.WxLogin)
 	r.POST("/setVip", Controllers.SetVip)
 	r.POST("/getJf", Controllers.GetJf)
@@ -22,7 +36,5 @@ func InitRouter() {
 	r.POST("/exchangeGoods", Controllers.ExchangeGoods)
 	r.POST("/getDetails", Controllers.GetDetails)
 	r.POST("/doneTask", Controllers.DoneTask)
-	r.POST("/getCourse", Controllers.GetCourse)
-	r.POST("/setCourse", Controllers.SetCourse)
 	r.Run()
 }

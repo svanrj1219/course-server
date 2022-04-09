@@ -1,6 +1,7 @@
 package Models
 
 import (
+	"fmt"
 	"gitee.com/svanrj/server/Databases"
 	"time"
 )
@@ -27,20 +28,21 @@ func (task Task) GetTaskModel(id int) (t []Task, err error) {
 	return tasks, err
 }
 
-func (task Task) GetLogModel(uid int) (i []IntegrationLog, err error) {
+func (task Task) GetLogModel(m map[string]int) (i []IntegrationLog, err error) {
 	var Logs []IntegrationLog
-	err = Databases.DB.Order("id desc").Where("uid = ?", uid).Find(&Logs).Error
+	err = Databases.DB.Order("id desc").Where("uid = ?", m["uid"]).Limit(m["size"]).Offset((m["page"] - 1) * m["size"]).Find(&Logs).Error
 
 	return Logs, err
 }
-
 func (task Task) DoneTaskModel() (err error) {
 	var integrationLog IntegrationLog
 
 	integrationLog.Integration = task.GetPoints
 	integrationLog.Uid = task.Uid
 	integrationLog.Remarks = task.Content
-	integrationLog.Date = time.Now().Format("2006-01-02")
+	integrationLog.Date = time.Now().Format("2006-01-02 15:04:05")
+
+	fmt.Println(integrationLog.Date)
 
 	Databases.DB.Create(&integrationLog)
 

@@ -17,8 +17,9 @@ func GetMallClass(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code": 1,
-		"data": malls,
+		"code":    1,
+		"data":    malls,
+		"message": "所有商品获取成功",
 	})
 }
 func ExchangeGoods(c *gin.Context) {
@@ -47,14 +48,14 @@ func GetDetails(c *gin.Context) {
 	var m map[string]int
 	_ = json.Unmarshal(b, &m)
 
-	details, err := detail.GetDetailsModel(m["id"])
-
+	details, err := detail.GetDetailsModel(m)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code": 1,
-		"data": details,
+		"code":    1,
+		"data":    details,
+		"message": "兑换详情获取成功",
 	})
 }

@@ -17,6 +17,10 @@ type WxUser struct {
 	Isvip       int64  `json:"isvip"`
 	Integration int    `json:"integration"`
 }
+type HistoryJf struct {
+	Name string `json:"name"`
+	Jf   int64  `json:"jf"`
+}
 
 //封装代码
 func (user *UserInfo) UserModel(username string) (u *UserInfo, err error) {
@@ -40,4 +44,23 @@ func (wxUser *WxUser) GetJfModel(id int) (jf int, err error) {
 	err = Databases.DB.Where("id=?", id).First(&wxUser).Error
 	jf = wxUser.Integration
 	return jf, err
+}
+func (historyJf HistoryJf) GetHistoryJfModel() (i []HistoryJf, err error) {
+	var wxUser []WxUser
+	err = Databases.DB.Where("isvip =?", 1).Find(&wxUser).Error
+
+	var HistoryJfs = make([]HistoryJf, len(wxUser))
+	for index, value := range wxUser {
+		var sum int64 = 0
+		var jfs []int64
+		err = Databases.DB.Table("integration_logs").Where("uid=?", value.ID).Pluck("integration", &jfs).Error
+		HistoryJfs[index].Name = value.Username
+		for _, val := range jfs {
+			sum = sum + val
+		}
+		HistoryJfs[index].Jf = sum
+
+	}
+
+	return HistoryJfs, err
 }
