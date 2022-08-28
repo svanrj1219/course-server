@@ -23,8 +23,10 @@ func InitRouter() {
 		adminGroup.GET("/getMallSummary", Controllers.GetMallSummary)
 		adminGroup.GET("/unconverted", Controllers.GetUnconverted)
 		adminGroup.GET("/taskLog", Controllers.GetTaskLog)
+		adminGroup.GET("/task", Controllers.GetAllTask)
 		adminGroup.GET("/mallLog", Controllers.GetMallLog)
 		adminGroup.PUT("/unconverted/:id", Controllers.UpdateUnconverted)
+		adminGroup.POST("/course", Controllers.AddCourse)
 	}
 	r.POST("/getCourse", Controllers.GetCourse)
 	r.POST("/wxlogin", Controllers.WxLogin)
@@ -36,5 +38,8 @@ func InitRouter() {
 	r.POST("/exchangeGoods", Controllers.ExchangeGoods)
 	r.POST("/getDetails", Controllers.GetDetails)
 	r.POST("/doneTask", Controllers.DoneTask)
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		return
+	}
 }

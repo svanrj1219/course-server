@@ -6,6 +6,7 @@ import (
 	"gitee.com/svanrj/server/Models"
 	"gitee.com/svanrj/server/utils"
 	"github.com/gin-gonic/gin"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -29,6 +30,7 @@ func Login(c *gin.Context) {
 			})
 			return
 		}
+		fmt.Println(userInfo.Password)
 		if password == userInfo.Password {
 			tokenString, _ := utils.GenToken(username)
 			c.JSON(http.StatusOK, gin.H{
@@ -57,7 +59,12 @@ func WxLogin(c *gin.Context) {
 	if err != nil {
 		fmt.Printf("get err:%v\n", err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(resp.Body)
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("read from resp.Body failed, err:%v\n", err)
@@ -85,7 +92,10 @@ func WxLogin(c *gin.Context) {
 func SetVip(c *gin.Context) {
 
 	var v Vip
-	c.ShouldBind(&v)
+	err := c.ShouldBind(&v)
+	if err != nil {
+		return
+	}
 
 	var user Models.WxUser
 	if v.Code == "112604" {
@@ -109,7 +119,10 @@ func SetVip(c *gin.Context) {
 func GetJf(c *gin.Context) {
 
 	var v Vip
-	c.ShouldBind(&v)
+	err := c.ShouldBind(&v)
+	if err != nil {
+		return
+	}
 
 	var user Models.WxUser
 

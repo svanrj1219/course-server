@@ -26,6 +26,24 @@ func GetTask(c *gin.Context) {
 		"data": tasks,
 	})
 }
+func GetAllTask(c *gin.Context) {
+	b, _ := c.GetRawData() // 从c.Request.Body读取请求数据
+	// 定义map或结构体
+	var m map[string]int
+	// 反序列化
+	_ = json.Unmarshal(b, &m)
+	var task Models.Task
+	tasks, err := task.GetAllTaskModel()
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 1,
+		"data": tasks,
+	})
+}
 func GetLog(c *gin.Context) {
 	b, _ := c.GetRawData() // 从c.Request.Body读取请求数据
 	// 定义map或结构体

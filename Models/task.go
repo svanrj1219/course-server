@@ -19,6 +19,11 @@ type Task struct {
 	Content   string `json:"content"`
 	GetPoints int    `json:"get_points"`
 }
+type AllTask struct {
+	Task
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+}
 
 //封装代码
 func (task Task) GetTaskModel(id int) (t []Task, err error) {
@@ -27,7 +32,11 @@ func (task Task) GetTaskModel(id int) (t []Task, err error) {
 
 	return tasks, err
 }
+func (task Task) GetAllTaskModel() (r []AllTask, err error) {
 
+	err = Databases.DB.Table("tasks as t").Select("t.*, u.username,u.avatar").Joins("left join wx_users as u  on	 t.uid=u.id").Order("id desc").Find(&r).Error
+	return r, err
+}
 func (task Task) GetLogModel(m map[string]int) (i []IntegrationLog, err error) {
 	var Logs []IntegrationLog
 	err = Databases.DB.Order("id desc").Where("uid = ?", m["uid"]).Limit(m["size"]).Offset((m["page"] - 1) * m["size"]).Find(&Logs).Error

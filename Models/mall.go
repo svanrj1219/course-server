@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"gitee.com/svanrj/server/Databases"
 	"gopkg.in/gomail.v2"
+	"io"
+	"net/http"
 	"time"
 )
 
@@ -97,6 +99,17 @@ func (mer *Merchandise) ExchangeGoodsModel(m M) (message string, err error) {
         </table>
     </div>`, mers.Name, d.CostCredits)
 		m.SetBody("text/html", content)
+		url := fmt.Sprintf(`https://sctapi.ftqq.com/SCT138520TleECGfxIejfjr116NrXmVEBV.send?title=兑换成功&desp=商品名称：%v\n所需积分：%v`, mers.Name, d.CostCredits)
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Printf("get err:%v\n", err)
+		}
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+
+			}
+		}(resp.Body)
 		//附件
 		//m.Attach("./myIpPic.png")
 

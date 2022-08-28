@@ -2,6 +2,7 @@ package Controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"gitee.com/svanrj/server/Models"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -43,5 +44,18 @@ func SetCourse(c *gin.Context) {
 			"code":    1,
 			"message": "修改成功",
 		})
+	}
+}
+func AddCourse(c *gin.Context) {
+	var course Models.Course
+
+	if err := c.ShouldBind(&course); err == nil {
+		if err := course.AddCourse(course); err == nil {
+			c.JSON(http.StatusOK, gin.H{"code": 1, "message": "添加成功"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"code": 0, "message": "添加失败"})
+		}
+	} else {
+		fmt.Println(err)
 	}
 }
